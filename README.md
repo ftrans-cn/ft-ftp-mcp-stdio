@@ -1,93 +1,209 @@
 # ft-ftp-mcp-stdio
 
+`ft-ftp-mcp-stdio` is a local MCP server for browsing and transferring files on FTP and SFTP servers. It runs over stdio, so an MCP client starts it as a child process and communicates through JSON-RPC on stdin/stdout. The server then uses native FTP or SFTP protocols to access configured remote file servers.
 
+## Features
 
-## Getting started
+- FTP and SFTP support.
+- MCP stdio transport, with no listening TCP port.
+- Multiple logical server aliases in one local config file.
+- Credentials loaded from the OS keyring or an environment variable, not from MCP tool arguments.
+- Virtual absolute remote paths, mapped to a configured server root.
+- Read-only server mode.
+- Upload protections: default no-overwrite behavior, size limits, and temporary same-directory upload commits.
+- Download staging to local disk instead of returning large file bodies through MCP.
+- Text preview for UTF-8, UTF-8 BOM, and GBK content.
+- Structured tool results and structured error payloads.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Tools
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+The server exposes these MCP tools:
 
-## Add your files
+| Tool | Purpose |
+| --- | --- |
+| `list_servers` | List configured logical servers without connecting to remote hosts. |
+| `test_connection` | Test connectivity and authentication. |
+| `list_dir` | List one remote directory level. |
+| `search_files` | Search recursively by filename pattern. |
+| `get_file_info` | Return metadata for one remote object. |
+| `read_text_preview` | Return the beginning of a text file. |
+| `download_file` | Download one remote file to local staging. |
+| `upload_file` | Upload one local file. |
+| `make_dir` | Create a remote directory. |
+| `rename` | Rename an object in the same directory. |
+| `move` | Move a file or directory. |
+| `delete` | Delete a file or empty directory. |
+| `download_dir` | Recursively download a directory to local staging. |
+| `upload_dir` | Recursively upload a local directory. |
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+## Requirements
 
+- Python `>=3.12,<3.13`
+- Windows is the currently verified platform.
+- FTP/SFTP account credentials with an appropriately restricted server-side root or account permission set.
+
+The code is written to keep most platform assumptions local, but non-Windows environments should be treated as unverified until tested.
+
+## Install From Source
+
+```powershell
+git clone <repository-url>
+cd ft-ftp-mcp-stdio
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -U pip
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
 ```
-cd existing_repo
-git remote add origin https://gitlab.ftrans.cn/ftrans/ft-ftp-mcp-stdio.git
-git branch -M main
-git push -uf origin main
+
+Start the MCP server manually:
+
+```powershell
+.\.venv\Scripts\python.exe -m ft_ftp_mcp_stdio
 ```
 
-## Integrate with your tools
+Normally your MCP client starts this command for you.
 
-- [ ] [Set up project integrations](https://gitlab.ftrans.cn/ftrans/ft-ftp-mcp-stdio/-/settings/integrations)
+## MCP Client Configuration
 
-## Collaborate with your team
+Generic stdio configuration:
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+```json
+{
+  "mcpServers": {
+    "ft-ftp-mcp-stdio": {
+      "command": "C:/path/to/python.exe",
+      "args": ["-m", "ft_ftp_mcp_stdio"],
+      "env": {
+        "FASTMCP_SHOW_SERVER_BANNER": "false",
+        "PYTHONUTF8": "1"
+      }
+    }
+  }
+}
+```
 
-## Test and Deploy
+Use the Python executable from the environment where this package is installed. On Windows, `PYTHONUTF8=1` helps keep stderr and diagnostics UTF-8 safe for strict MCP clients.
 
-Use the built-in continuous integration in GitLab.
+## Server Configuration
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+The default config path is:
 
-***
+```text
+~/.ft-ftp-mcp/config.json
+```
 
-# Editing this README
+Override it with:
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+```text
+FT_FTP_MCP_CONFIG
+```
 
-## Suggestions for a good README
+Minimal example:
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+```json
+{
+  "version": 2,
+  "default_server": "ftp1",
+  "staging_dir": "~/.ft-ftp-mcp/staging",
+  "log_usage": true,
+  "servers": [
+    {
+      "alias": "ftp1",
+      "protocol": "ftp",
+      "host": "ftp.example.com",
+      "port": 21,
+      "username": "your_user",
+      "root": "/",
+      "description": "Example read-only FTP server",
+      "readOnly": true,
+      "max_file_size_bytes": 2147483648,
+      "encoding": "auto",
+      "credential_env": null,
+      "key_path": null,
+      "host_key_fingerprint": null
+    }
+  ]
+}
+```
 
-## Name
-Choose a self-explaining name for your project.
+Important notes:
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+- `root` is the real server-side root mapped to the virtual MCP path `/`.
+- `readOnly` defaults to `true`; set it to `false` only for accounts intended to write.
+- `credential_env` names an environment variable containing the password or SFTP key passphrase.
+- `key_path` enables SFTP private-key authentication.
+- `host_key_fingerprint` pins an SFTP host key fingerprint. Without it, SFTP uses trust-on-first-use records in `known_hosts`.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## Credentials
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Store credentials outside MCP conversations:
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+```powershell
+.\.venv\Scripts\python.exe -m ft_ftp_mcp_stdio cred add <alias>
+.\.venv\Scripts\python.exe -m ft_ftp_mcp_stdio cred list
+.\.venv\Scripts\python.exe -m ft_ftp_mcp_stdio cred remove <alias>
+```
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Credential lookup prefers the OS keyring. If no keyring entry exists and `credential_env` is configured, the value is read from that environment variable.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+## Operations
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Useful local commands:
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+```powershell
+# Interactive config wizard
+.\.venv\Scripts\python.exe -m ft_ftp_mcp_stdio setup
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+# Read-only diagnostics
+.\.venv\Scripts\python.exe -m ft_ftp_mcp_stdio doctor
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+# Diagnostics for one server alias
+.\.venv\Scripts\python.exe -m ft_ftp_mcp_stdio doctor --server <alias>
+```
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Downloaded files are written under the configured `staging_dir`. The project does not currently clean staging automatically.
+
+## Development
+
+Run the local checks:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest
+.\.venv\Scripts\ruff.exe check .
+.\.venv\Scripts\mypy.exe src tests scripts
+```
+
+Live FTP/SFTP tests are optional and must be run only against an isolated, authorized test server:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest --live
+```
+
+Do not run live tests against production file servers.
+
+## Security Model
+
+- Passwords and private-key passphrases are not MCP tool arguments.
+- Remote paths are virtual absolute paths and are checked before remote operations.
+- Write tools reject read-only servers before connecting.
+- Uploads default to no overwrite.
+- `rename` and `move` reject existing targets.
+- `delete` requires `confirm=true` and deletes only files or empty directories.
+- SFTP host keys are pinned by explicit fingerprint or by trust-on-first-use.
+
+See [SECURITY.md](SECURITY.md) for reporting guidance.
+
+## Repository Contents
+
+```text
+src/          Python package
+tests/        Unit, contract, CLI, and optional live tests
+scripts/      Development and schema helper scripts
+templates/    MCP client config templates
+fixtures/     Non-sensitive test fixtures
+docs/schema/  Machine-readable config and MCP tool schemas
+docs/decisions/ Architecture decision records
+```
 
 ## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+This project is licensed under the MIT License. See [LICENSE](LICENSE).

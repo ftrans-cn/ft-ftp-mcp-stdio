@@ -1,0 +1,192 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ft-ftp-mcp-stdio:config-schema:2",
+  "title": "ft-ftp-mcp-stdio configuration",
+  "description": "Configuration file schema for ft-ftp-mcp-stdio 0.3.0. Runtime validation remains authoritative for alias uniqueness, default_server references, and filesystem-dependent checks.",
+  "type": "object",
+  "required": [
+    "version",
+    "servers"
+  ],
+  "properties": {
+    "version": {
+      "description": "Configuration format version.",
+      "const": 2
+    },
+    "default_server": {
+      "description": "Alias used when a tool call omits server. Required when two or more servers are configured.",
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "staging_dir": {
+      "description": "Absolute local download staging path or a path beginning with ~.",
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?:~(?:[\\\\/]|$)|/|[A-Za-z]:[\\\\/]|\\\\\\\\)"
+    },
+    "log_usage": {
+      "description": "Whether to append local JSONL usage records.",
+      "type": "boolean",
+      "default": true
+    },
+    "servers": {
+      "description": "FTP and SFTP server definitions. Aliases must be unique; runtime validation enforces uniqueness.",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/server"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "servers": {
+            "minItems": 2
+          }
+        },
+        "required": [
+          "servers"
+        ]
+      },
+      "then": {
+        "properties": {
+          "default_server": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "default_server"
+        ]
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "nullableString": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "nonNegativeInteger": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "server": {
+      "type": "object",
+      "required": [
+        "alias",
+        "protocol",
+        "host",
+        "username"
+        ,"root"
+      ],
+      "properties": {
+        "alias": {
+          "description": "Case-sensitive server alias and keyring account name.",
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_-]{0,63}$"
+        },
+        "protocol": {
+          "type": "string",
+          "enum": [
+            "ftp",
+            "sftp"
+          ]
+        },
+        "host": {
+          "type": "string",
+          "minLength": 1
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "username": {
+          "type": "string",
+          "minLength": 1
+        },
+        "root": {
+          "description": "Normalized server absolute path used as the lexical path jail. A trailing slash is accepted and normalized by the runtime.",
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*//)(?!.*\\\\)/.*$"
+        },
+        "description": {
+          "description": "Optional non-sensitive label used for server selection.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "readOnly": {
+          "type": "boolean",
+          "default": true
+        },
+        "encoding": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "utf-8",
+            "gbk"
+          ],
+          "default": "auto"
+        },
+        "max_file_size_bytes": {
+          "$ref": "#/$defs/nonNegativeInteger",
+          "default": 2147483648
+        },
+        "key_path": {
+          "$ref": "#/$defs/nullableString",
+          "description": "Local SFTP private key path. FTP servers may only omit it or set it to null."
+        },
+        "credential_env": {
+          "description": "Environment variable name containing a password or private-key passphrase.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+        },
+        "host_key_fingerprint": {
+          "$ref": "#/$defs/nullableString",
+          "description": "Expected SFTP host key fingerprint. FTP servers may only omit it or set it to null."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "protocol": {
+                "const": "ftp"
+              }
+            },
+            "required": [
+              "protocol"
+            ]
+          },
+          "then": {
+            "properties": {
+              "key_path": {
+                "type": "null"
+              },
+              "host_key_fingerprint": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  }
+}

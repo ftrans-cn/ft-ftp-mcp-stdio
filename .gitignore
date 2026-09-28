@@ -1,0 +1,42 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.uv-cache/
+
+# Build outputs
+dist/
+build/
+*.whl
+/wheels/
+/dev-wheels/
+/release/
+*.zip
+*.bundle
+SHA256SUMS.txt
+
+# Local runtime state
+/.ft-ftp-mcp/
+known_hosts
+staging/
+logs/
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.ppk
+*.p12
+*.pfx
+config.json
+config.json.*
+
+# Handover/package scratch
+/repository/
+/documents/

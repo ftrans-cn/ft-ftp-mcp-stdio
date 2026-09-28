@@ -1,0 +1,13 @@
+{
+  "_note": "安装脚本会生成含实际 Python 路径的最终模板。将 mcpServers 下的 ft-ftp-mcp-stdio 条目合并到 WorkBuddy 的 mcp.json，保留其他服务器；贴入后到连接器管理对该服务器点“信任”。此后凡 command/args/env 变更，信任失效，需重新信任。",
+  "mcpServers": {
+    "ft-ftp-mcp-stdio": {
+      "command": "{{VENV_PYTHON}}",
+      "args": ["-m", "ft_ftp_mcp_stdio"],
+      "env": {
+        "FASTMCP_SHOW_SERVER_BANNER": "false",
+        "PYTHONUTF8": "1"
+      }
+    }
+  }
+}

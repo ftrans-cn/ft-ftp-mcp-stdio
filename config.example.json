@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "default_server": "ftp1",
+  "staging_dir": "~/.ft-ftp-mcp/staging",
+  "log_usage": true,
+  "servers": [
+    {
+      "alias": "ftp1",
+      "protocol": "ftp",
+      "host": "ftp.example.com",
+      "port": 21,
+      "username": "your_user",
+      "root": "/",
+      "description": "Example read-only FTP server",
+      "readOnly": true,
+      "max_file_size_bytes": 2147483648,
+      "encoding": "auto",
+      "credential_env": null,
+      "key_path": null,
+      "host_key_fingerprint": null
+    }
+  ]
+}

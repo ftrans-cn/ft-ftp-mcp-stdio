@@ -1,0 +1,8 @@
+# 安装脚本会生成含实际 Python 路径的最终模板；将生成的片段加入 ~/.codex/config.toml。
+[mcp_servers.ft-ftp-mcp-stdio]
+command = "{{VENV_PYTHON}}"
+args = ["-m", "ft_ftp_mcp_stdio"]
+
+[mcp_servers.ft-ftp-mcp-stdio.env]
+FASTMCP_SHOW_SERVER_BANNER = "false"
+PYTHONUTF8 = "1"
