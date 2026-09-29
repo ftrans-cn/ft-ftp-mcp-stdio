@@ -1,8 +1,8 @@
 # FT Agent FTP 插件当前 Spec 基线
 
 > 状态：Current（实现及独立代码审查完成）
-> 基线日期：2026-09-23
-> 产品版本：`ft-ftp-mcp-stdio 0.3.0`
+> 基线日期：2026-09-29
+> 产品版本：`ft-ftp-mcp-stdio 0.3.1`
 > 实现起点：`1e816078458b41ea2a7518a8561aa6558ee2daf4`
 > 适用范围：MCP stdio 服务及其 14 个 FTP/SFTP 文件工具
 

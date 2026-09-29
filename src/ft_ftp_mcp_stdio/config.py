@@ -9,7 +9,7 @@ from typing import Any
 from .errors import AppError
 from .models import AppConfig, ServerConfig
 
-ALIAS_RE = re.compile(r"^[a-zA-Z][a-zA-Z0-9_-]{0,63}$")
+ALIAS_RE = re.compile(r"^[\w.-]{1,64}$")
 ENV_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 
 

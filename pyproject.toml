@@ -1,6 +1,6 @@
 [project]
 name = "ft-ftp-mcp-stdio"
-version = "0.3.0"
+version = "0.3.1"
 description = "FTP/SFTP MCP server using the stdio transport."
 readme = "README.md"
 license = "MIT"

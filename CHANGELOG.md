@@ -1,11 +1,17 @@
-# Changelog
+# 变更日志
+
+## 0.3.1
+
+- 简化交互式配置流程，新配置的凭据统一保存到操作系统凭据管理器。
+- 放宽服务器别名规则，支持中文、英文、数字、点、短横线和下划线。
+- 保存服务器配置后不再自动打印 Codex 和 WorkBuddy 配置模板。
+- 调整离线包构建逻辑，自动包含版本号最高的快速安装手册。
 
 ## 0.3.0
 
-- Added the current 14-tool MCP interface for FTP/SFTP browsing, transfer, and maintenance.
-- Added v2 configuration with multiple logical server aliases.
-- Added read-only server mode and local write-operation guards.
-- Added SFTP private-key authentication and host-key verification.
-- Added structured MCP tool output schemas.
-- Added optional live FTP/SFTP tests for isolated test environments.
-
+- 新增包含 14 个工具的 MCP 接口，支持 FTP/SFTP 浏览、传输和文件维护。
+- 新增 v2 配置格式，支持多个逻辑服务器别名。
+- 新增服务器只读模式和本地写操作保护。
+- 新增 SFTP 私钥认证和主机密钥校验。
+- 新增结构化 MCP 工具输出 Schema。
+- 新增可选的 FTP/SFTP 实际环境测试，用于隔离测试环境。

@@ -103,7 +103,6 @@ def _upsert(config: AppConfig | None, editing: str | None, input_fn: Input, secr
     root = str(values["root"])
     key_value = str(values["key_path"])
     key_path = Path(key_value).expanduser() if key_value else None
-    credential_env = str(values["credential_env"])
     server = ServerConfig(
         alias,
         protocol,
@@ -116,7 +115,7 @@ def _upsert(config: AppConfig | None, editing: str | None, input_fn: Input, secr
         encoding=str(values["encoding"]),
         max_file_size_bytes=int(values["max_file"]),
         key_path=key_path,
-        credential_env=credential_env or None,
+        credential_env=None,
         host_key_fingerprint=str(values["fingerprint"]) or None,
     )
     _validate_server(server)
@@ -128,7 +127,7 @@ def _upsert(config: AppConfig | None, editing: str | None, input_fn: Input, secr
     updated = _with_server(config, server)
     original, backup = save_config_atomic(updated)
     try:
-        if not server.credential_env and supplied is not None:
+        if supplied is not None:
             if supplied:
                 keyring.set_password(SERVICE_NAME, alias, supplied)
             elif server.key_path and current is None:
@@ -144,7 +143,6 @@ def _upsert(config: AppConfig | None, editing: str | None, input_fn: Input, secr
     print(f"服务器 {alias} 已保存并通过连接测试。")
     if backup:
         print(f"原配置备份：{backup}")
-    print_client_snippets()
 
 
 def _collect_server_values(
@@ -155,7 +153,7 @@ def _collect_server_values(
 ) -> dict[str, Any]:
     fields: list[tuple[str, str, object, str]] = []
     if editing is None:
-        fields.append(("alias", "别名", "", "text"))
+        fields.append(("alias", "别名（1-64 位，支持中英文、数字、点、短横线和下划线）", "", "text"))
     fields.extend(
         [
             ("protocol", "协议 ftp/sftp", current.protocol if current else "ftp", "choice:ftp,sftp"),
@@ -169,7 +167,6 @@ def _collect_server_values(
             ("max_file", "单文件上限（字节）", current.max_file_size_bytes if current else 2 * 1024**3, "int"),
             ("key_path", "私钥路径（留空使用密码）", str(current.key_path) if current and current.key_path else "", "optional"),
             ("fingerprint", "主机指纹（留空使用 TOFU）", current.host_key_fingerprint if current else "", "optional"),
-            ("credential_env", "凭据环境变量名（留空使用钥匙串）", current.credential_env if current else "", "optional"),
             ("secret", "密码或私钥口令（修改时留空保留现值）", "", "secret"),
         ]
     )
@@ -178,9 +175,7 @@ def _collect_server_values(
 
     def skipped(position: int) -> bool:
         name = fields[position][0]
-        return (name in {"key_path", "fingerprint"} and values.get("protocol") == "ftp") or (
-            name == "secret" and bool(values.get("credential_env"))
-        )
+        return name in {"key_path", "fingerprint"} and values.get("protocol") == "ftp"
 
     while index < len(fields):
         name, label, default, kind = fields[index]
@@ -376,10 +371,6 @@ def _validate_collected_value(name: str, value: object) -> None:
     ):
         raise ValueError
     if name == "description" and isinstance(value, str) and len(value) > 200:
-        raise ValueError
-    if name == "credential_env" and value and (
-        not isinstance(value, str) or not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", value)
-    ):
         raise ValueError
 
 

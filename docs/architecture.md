@@ -1,5 +1,7 @@
 # Architecture
 
+Product version: `ft-ftp-mcp-stdio 0.3.1`.
+
 `ft-ftp-mcp-stdio` is a local, single-user MCP server. An MCP client starts it as a stdio child process, then calls file tools over JSON-RPC. The server reads local configuration and credentials, connects to the selected FTP or SFTP server, performs the operation, closes the connection, and returns structured MCP content.
 
 ```text
@@ -103,4 +105,3 @@ Uploads write to a temporary object in the target directory and then commit to t
 - There is no automatic staging cleanup.
 - Batch upload/download operations are not transactional.
 - Non-Windows platforms are not yet verified.
-

@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 
 from ft_ftp_mcp_stdio import setup_wizard as wizard
-from ft_ftp_mcp_stdio.config import load_config
+from ft_ftp_mcp_stdio.config import ALIAS_RE, load_config
 from ft_ftp_mcp_stdio.config_store import (
     config_to_dict,
     restore_config,
@@ -67,6 +67,65 @@ def test_collected_values_allow_zero_limit_and_reject_invalid_root() -> None:
     wizard._validate_collected_value("max_file", 0)
     with pytest.raises(ValueError):
         wizard._validate_collected_value("root", "/safe/../escape")
+
+
+@pytest.mark.parametrize("alias", ["1", "prod.ftp", "华东-文件服务器", "server_01"])
+def test_alias_rule_accepts_clear_user_friendly_names(alias: str) -> None:
+    assert ALIAS_RE.fullmatch(alias)
+
+
+@pytest.mark.parametrize("alias", ["", "has space", "has/slash", "x" * 65])
+def test_alias_rule_rejects_ambiguous_or_oversized_names(alias: str) -> None:
+    assert ALIAS_RE.fullmatch(alias) is None
+
+
+def test_collect_server_values_uses_keyring_without_environment_prompt() -> None:
+    answers = iter(["华东.ftp", "ftp", "host", "21", "user", "/", "", "y", "auto", "1024"])
+    prompts: list[str] = []
+
+    def input_fn(prompt: str) -> str:
+        prompts.append(prompt)
+        return next(answers)
+
+    values = wizard._collect_server_values(None, None, input_fn, lambda prompt: "secret")
+
+    assert values["alias"] == "华东.ftp"
+    assert "credential_env" not in values
+    assert not any("环境变量" in prompt for prompt in prompts)
+    assert "1-64 位" in prompts[0]
+
+
+def test_upsert_does_not_print_client_templates(monkeypatch: pytest.MonkeyPatch, app_config, capsys) -> None:
+    values = {
+        "protocol": "ftp",
+        "host": "host",
+        "port": 21,
+        "username": "user",
+        "root": "/",
+        "description": "",
+        "read_only": True,
+        "encoding": "auto",
+        "max_file": 1024,
+        "key_path": "",
+        "fingerprint": "",
+        "secret": "new-secret",
+    }
+    monkeypatch.setattr(wizard, "_collect_server_values", lambda *args: values)
+    monkeypatch.setattr(wizard, "_test_candidate", lambda *args: None)
+    saved = []
+    credentials = []
+    monkeypatch.setattr(wizard, "save_config_atomic", lambda config: (saved.append(config), (None, None))[1])
+    monkeypatch.setattr(wizard.keyring, "set_password", lambda *args: credentials.append(args))
+    monkeypatch.setattr(wizard, "print_client_snippets", lambda: pytest.fail("must not print client templates"))
+
+    wizard._upsert(app_config, "local", lambda prompt: "", lambda prompt: "")
+
+    output = capsys.readouterr().out
+    assert "已保存并通过连接测试" in output
+    assert "Codex" not in output
+    assert "WorkBuddy" not in output
+    assert saved[0].servers["local"].credential_env is None
+    assert credentials == [(wizard.SERVICE_NAME, "local", "new-secret")]
 
 
 def test_client_snippets_use_canonical_registration_name(capsys) -> None:

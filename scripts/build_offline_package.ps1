@@ -1,4 +1,4 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param()
 
 $ErrorActionPreference = "Stop"
@@ -51,9 +51,20 @@ foreach ($wheel in $wheels) {
 }
 if ($expectedWheels.Count -ne $wheels.Count) { throw "Manifest contains wheels that are not present" }
 
-$manuals = @(Get-ChildItem -LiteralPath (Join-Path $repoRoot "docs") -Filter "*_v1.12.md" -File)
-if ($manuals.Count -ne 1) { throw "Expected exactly one v1.12 user manual" }
-$manual = $manuals[0]
+$manuals = @(
+    Get-ChildItem -LiteralPath (Join-Path $repoRoot "docs") -Filter "FTP-MCP-快速安装手册-v*.md" -File |
+        ForEach-Object {
+            if ($_.Name -match '^FTP-MCP-快速安装手册-v(?<version>\d+\.\d+\.\d+)\.md$') {
+                [PSCustomObject]@{
+                    File    = $_
+                    Version = [version]$Matches.version
+                }
+            }
+        } |
+        Sort-Object Version -Descending
+)
+if ($manuals.Count -eq 0) { throw "No FTP MCP quick installation manual found" }
+$manual = $manuals[0].File
 $utf8 = New-Object System.Text.UTF8Encoding($false)
 [System.IO.File]::WriteAllText($versionFile, "$version`n", $utf8)
 

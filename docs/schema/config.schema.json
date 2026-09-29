@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:ft-ftp-mcp-stdio:config-schema:2",
   "title": "ft-ftp-mcp-stdio configuration",
-  "description": "Configuration file schema for ft-ftp-mcp-stdio 0.3.0. Runtime validation remains authoritative for alias uniqueness, default_server references, and filesystem-dependent checks.",
+  "description": "Configuration file schema for ft-ftp-mcp-stdio 0.3.1. Runtime validation remains authoritative for alias uniqueness, default_server references, and filesystem-dependent checks.",
   "type": "object",
   "required": [
     "version",
@@ -93,7 +93,7 @@
         "alias": {
           "description": "Case-sensitive server alias and keyring account name.",
           "type": "string",
-          "pattern": "^[a-zA-Z][a-zA-Z0-9_-]{0,63}$"
+          "pattern": "^[A-Za-z0-9_.\\-\u4e00-\u9fff]{1,64}$"
         },
         "protocol": {
           "type": "string",
