@@ -318,7 +318,7 @@ ft-ftp-mcp-stdio/
 README 用于项目概览、快速接入和开发入口；完整契约与操作细节以下列专项文档为准：
 
 - [当前 Spec 基线](docs/spec/current.md)：已经实现、可验证的运行时行为与已知契约缺口
-- [快速安装手册](docs/FTP-MCP-快速安装手册-v0.3.0.md)：安装、客户端接入、配置和操作示例
+- [快速安装手册](docs/FTP-MCP-快速安装手册-v0.3.1.md)：安装、客户端接入、配置和操作示例
 - [产品能力清单](docs/产品能力清单_v0.4.md)：当前功能、兼容性和边界
 - [配置文件规范](docs/配置文件规范（config.json）_v0.5.md)：字段、校验、凭据与路径规则
 - [正式 MCP 工具 Schema](docs/schema/mcp-tools.json)：从运行时 `tools/list` 生成的 14 个工具机器契约
