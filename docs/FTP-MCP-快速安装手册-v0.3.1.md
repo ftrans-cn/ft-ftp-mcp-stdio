@@ -1,6 +1,6 @@
 # FTP MCP 0.3.1 快速安装手册
 
-> 本文档是 ft-ftp-mcp-stdio-0.3.1（以下简称"本工具"）的快速安装手册。
+> 本文档是 ft-ftp-mcp-stdio-0.3.1（以下简称"本工具"）的快速安装手册，适用于将本工具接入 WorkBuddy 或 Codex 后，通过 AI Agent 使用 FTP/SFTP 能力。
 
 1. 安装 Python 3.12 x64（本机如已安装则忽略本步骤）
    下载地址：<https://www.python.org/ftp/python/3.13.12/python-3.13.12-amd64.exe/>，下载 Windows installer (64-bit) 安装包，安装时勾选 "Add python.exe to PATH"。
@@ -32,7 +32,6 @@
    ```
 
 4. 将本工具注册到 AI 应用（WorkBuddy、Codex）
-   如果当前只是手动安装和配置服务器，可跳过本步骤，直接进入第 5 步。
 
    install.bat 结束时提示模板位置 `Generated client templates: ...\AppData\Local\ft-ftp-mcp\templates`，该目录中已存有两份本机真实配置片段（workbuddy-mcp.json 和 codex-config.toml）。
 
@@ -109,7 +108,7 @@
    ```
 
 6. 冒烟测试
-   如果已完成第 4 步并重启 Agent，可向 Agent 对话发送提示词，例如：
+   完成第 4 步并重启 AI 应用后，向 Agent 对话发送提示词，例如：
 
    ```text
    使用 MCP 工具连接 ftp1，列出根目录内容
@@ -127,8 +126,4 @@
    upload_dir, rename, move, delete
    ```
 
-   如果当前未接入 AI Agent，可使用第 5 步中的 `doctor` 作为手动安装冒烟验证。`doctor` 通过表示本机安装、配置、凭据和协议登录链路可用。
-
 7. 测试通过后，即可在对话中使用自然语言，让你的 Agent 调用 FTP/SFTP 工具了。
-
-   如果当前不接入 AI Agent，则安装结果到此为止：你已经完成本机安装、服务器配置、凭据保存和连接诊断。注意：`list_dir`、`download_file`、`upload_file`、`delete` 等是 MCP 工具，不是普通命令行子命令，不能仅通过 CLI 直接执行。
