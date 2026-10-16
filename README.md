@@ -308,6 +308,7 @@ ft-ftp-mcp-stdio/
 - 不支持 FTPS、断点续传、异步传输和显式传输超时。
 - 不提供 GUI、多用户模式或远程 MCP 服务模式。
 - 正式离线安装包当前仅提供 Windows x64 版本。
+- 另提供 Windows 交叉构建的 macOS 通用离线包，同时支持 arm64（Apple Silicon）和 x86_64（Intel），自动选择对应依赖。Intel 使用 cryptography 48.0.1 兼容锁；使用方法和验证范围见 [macOS 安装手册](docs/FTP-MCP-快速安装手册-macOS-v0.3.1.md)。
 - 暂存目录不会自动清理。
 - 目录批量传输是 best-effort、非事务操作；必须检查 `status`、`failed` 和上传结果的 `indeterminate`，不确定时不得整体重试。
 - 上传和下载没有客户端批次总量限制，超大目录、磁盘或远端配额耗尽仍是已知资源风险。
@@ -318,7 +319,8 @@ ft-ftp-mcp-stdio/
 README 用于项目概览、快速接入和开发入口；完整契约与操作细节以下列专项文档为准：
 
 - [当前 Spec 基线](docs/spec/current.md)：已经实现、可验证的运行时行为与已知契约缺口
-- [快速安装手册](docs/FTP-MCP-快速安装手册-v0.3.1.md)：安装、客户端接入、配置和操作示例
+- [Windows 快速安装手册](docs/FTP-MCP-快速安装手册-windows-v0.3.1.md)：安装、客户端接入、配置和操作示例
+- [macOS 通用安装手册](docs/FTP-MCP-快速安装手册-macOS-v0.3.1.md)：Apple Silicon 和 Intel 安装、客户端接入、Keychain 和连接验证
 - [产品能力清单](docs/产品能力清单_v0.4.md)：当前功能、兼容性和边界
 - [配置文件规范](docs/配置文件规范（config.json）_v0.5.md)：字段、校验、凭据与路径规则
 - [正式 MCP 工具 Schema](docs/schema/mcp-tools.json)：从运行时 `tools/list` 生成的 14 个工具机器契约

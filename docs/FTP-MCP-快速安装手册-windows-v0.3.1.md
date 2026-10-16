@@ -3,7 +3,7 @@
 > 本文档是 ft-ftp-mcp-stdio-0.3.1（以下简称"本工具"）的快速安装手册，适用于将本工具接入 WorkBuddy 或 Codex 后，通过 AI Agent 使用 FTP/SFTP 能力。
 
 1. 安装 Python 3.12 x64（本机如已安装则忽略本步骤）
-   下载地址：<https://www.python.org/ftp/python/3.13.12/python-3.13.12-amd64.exe/>，下载 Windows installer (64-bit) 安装包，安装时勾选 "Add python.exe to PATH"。
+   下载地址：[Python 3.12.10 官方发布页](https://www.python.org/downloads/release/python-31210/)，在 Files 区域下载 Windows installer (64-bit) 安装包，安装时勾选 "Add python.exe to PATH"。本工具仅支持 Python 3.12.x，不要使用 Python 3.13 或更高版本替代。
 
 2. 解压本工具的安装包
    `ft-ftp-mcp-stdio-offline-0.3.1-py312-win64.zip` → `D:\ft-ftp-mcp-stdio-0.3.1`（示例路径）

@@ -1,5 +1,37 @@
 # ft-ftp-mcp-stdio v0.3.1
 
+## macOS 通用包替代分离包（2026-10-16）
+
+- 统一为 `ft-ftp-mcp-stdio-offline-0.3.1-py312-macos.zip`，替代同版本 arm64 与 x86_64 分离包；下方双架构分离记录仅供历史追溯。
+- ZIP 内仅提供一份 macOS 快速安装手册；脚本按 Python 实际架构自动选择依赖，在 Rosetta 下给出提示。
+- 共用 wheel 去重存放，两架构依赖分别锁定并校验；已有虚拟环境架构冲突时停止安装。
+- 仍需预装 Python 3.12；未将 Python 安装器加入 ZIP，未完成真实 Mac 实机验收。
+- 通用包包含 78 个去重后的 wheel（64 个共用，每架构实际安装 71 个），约 26.47 MiB。归档、每架构哈希和平台标签、单一手册与 shell 语法校验通过；非 live 回归为 170 passed、11 skipped，包含 6 个架构选择/运行时拒绝测试。Ruff 与新增文件 mypy 检查通过。
+
+## macOS 双架构补充分发（2026-10-16）
+
+- 提供 arm64（Apple Silicon）与 x86_64（Intel）两个离线 ZIP，均要求 macOS 11+、对应架构的 Python 3.12；Python 安装器仍不包含在包内。
+- 每个 ZIP 新增对应架构的完整快速安装手册，涵盖安装、客户端注册、FTP/SFTP 配置、诊断与冒烟测试。
+- Intel 包通过 `scripts/requirements-macos-x86_64.txt` 固定 cryptography 48.0.1 及官方 PyPI wheel 哈希，解决上游 49+ 移除 Intel macOS 支持导致的构建阻塞。其余依赖沿用 uv.lock；arm64 依赖版本不变。
+- 包内 `requirements.txt` 锁定实际 wheel 版本与哈希；Intel 包另附 `compatibility-lock.txt`。BUILD-INFO 明确记录覆盖版本与兼容锁哈希。
+- 两种架构均完成 wheel 平台标签、完整依赖闭包和 ZIP 校验。尚未进行真实 Mac 的安装、Keychain 与 MCP 联调，不宣称已通过 macOS 运行验收。
+- Intel 兼容依赖在 Windows 隔离环境通过非 live 回归（164 passed, 11 skipped）、依赖一致性检查及真实 stdio 启动/14 工具发现；该证据只证明兼容依赖的软件行为，不替代 Intel Mac 实机验收。
+
+## macOS 补充分发（2026-10-10）
+
+新增 Windows 交叉构建的 Apple Silicon arm64 离线 ZIP：
+`ft-ftp-mcp-stdio-offline-0.3.1-py312-macos-arm64.zip`。
+要求 macOS 11+、原生 arm64 Python 3.12.x；Python 不包含在包内。
+新增安装脚本、锁定哈希依赖安装和客户端模板生成，核心运行代码与版本号不变。
+包包含 71 个 wheel，已通过依赖下载哈希、macOS 标签、依赖闭包与 ZIP 内容校验。
+现有非 live 回归通过（164 passed, 11 skipped），Ruff 通过，新增构建脚本 mypy 通过。
+全仓库 mypy 在既有 tests/test_setup.py:117 报 func-returns-value，未修改该测试。
+尚未在真实 Mac 上执行安装、Keychain 或 MCP 联调，不宣称已通过 macOS 运行验收。
+Intel 构建未完成：锁定的 cryptography 50.0.1 未提供 macOS x86_64 wheel。
+使用方法见 [macOS 安装手册](docs/FTP-MCP-快速安装手册-macOS-v0.3.1.md)。
+
+## Windows 原发布记录
+
 - 发布日期：2026-09-29
 - 发布状态：发布候选已重新构建并通过技术验证；快速安装手册下载链接待校正后正式发布
 - 分发形态：Windows 10/11 x64、Python 3.12 的离线全量 ZIP；不单独发布 wheel 或 sdist
