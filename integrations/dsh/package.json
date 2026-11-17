@@ -1,7 +1,7 @@
 {
-  "name": "dsh-ft-ftp",
-  "version": "0.1.0",
-  "description": "FTP/SFTP tools for DeepSeek Harness using the independently installed FT FTP MCP server.",
+  "name": "ft-ftp-mcp-stdio",
+  "version": "0.3.1",
+  "description": "FT FTP MCP: FTP/SFTP file tools for AI agents, with DeepSeek Harness installation support.",
   "type": "module",
   "license": "MIT",
   "main": "index.mjs",

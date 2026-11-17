@@ -1,6 +1,6 @@
-# FT Agent FTP 插件
+# FT FTP MCP
 
-FT Agent FTP 插件是一个通过 stdio 运行的本地 MCP Server，让支持 MCP 的 AI Agent 在受控范围内访问 FTP/SFTP 服务器。工程名、Python 包入口和 MCP 注册名统一使用 `ft-ftp-mcp-stdio`。
+FT FTP MCP 是一个通过 stdio 运行的本地 MCP Server，让支持 MCP 的 AI Agent 在受控范围内访问 FTP/SFTP 服务器。工程名、Python 包入口和 MCP 注册名统一使用 `ft-ftp-mcp-stdio`。
 
 - 当前版本：`0.3.1`
 - 支持的正式分发环境：Windows 10/11 x64 + Python 3.12.x
@@ -57,7 +57,7 @@ MCP 客户端配置只负责启动本地 Server；FTP/SFTP 主机、账号和边
 
 ## 快速开始
 
-DSH Market 适配位于独立目录，不改变下面的独立 MCP 安装方式，也不改变 Codex / WorkBuddy 的手动配置。DSH 用户参阅 [Windows / macOS 通用安装说明](integrations/dsh/README.md)，维护者参阅 [适配验证记录](docs/DSH-Market-适配验证.md)。
+DeepSeek Harness 用户参阅 [FT FTP MCP 安装说明](integrations/dsh/README.md)。Codex / WorkBuddy 用户按下文完成独立 MCP 安装与手动配置；详细验证结果见 [验证记录](docs/DSH-Market-适配验证.md)。
 
 ### 1. 安装发布包
 

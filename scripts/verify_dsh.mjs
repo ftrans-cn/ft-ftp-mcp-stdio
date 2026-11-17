@@ -19,7 +19,7 @@ const { Context } = await load('@deepseek-ai/cordis');
 const { default: SystemPrompt } = await load('@deepseek-ai/dsh-system-prompt');
 const { ToolsService } = await load('@deepseek-ai/dsh-tools');
 const executor = await load('@deepseek-ai/dsh-tool-executor-native');
-const plugin = await load('dsh-ft-ftp'); // installed tarball, never source import
+const plugin = await load('ft-ftp-mcp-stdio'); // installed tarball, never source import
 const home = mkdtempSync(join(tmpdir(), 'ft-ftp dsh verification '));
 const fixture = spawn(pythonPath, ['-u', join(dirname(fileURLToPath(import.meta.url)), 'dsh_ftp_fixture.py'), home], {
   stdio: ['ignore', 'pipe', 'inherit'], windowsHide: true,

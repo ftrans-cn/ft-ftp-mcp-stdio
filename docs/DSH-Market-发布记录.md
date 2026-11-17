@@ -1,32 +1,31 @@
-# DSH Market 发布记录
+# FT FTP MCP 发布记录
 
-适配包：`dsh-ft-ftp@0.1.0`。产品运行时：`ft-ftp-mcp-stdio@0.3.1`。兼容 DSH 0.2.2-rc.1，Node >=24.9。更新日期：2026-11-17。
+产品及 npm 包名：`ft-ftp-mcp-stdio`。版本：`0.3.1`。更新日期：2026-11-17。
 
-## 发布状态
+## 当前状态
 
-- 代码已推送：[提交 cfe8cec](https://github.com/ftrans-cn/ft-ftp-mcp-stdio/commit/cfe8cecb5a22ea2f1b1edb9492ef7a869c34622b)，适配源目录 `integrations/dsh`。
-- GitHub 插件包已发布：[dsh-v0.1.0 Release](https://github.com/ftrans-cn/ft-ftp-mcp-stdio/releases/tag/dsh-v0.1.0)，包含 tarball 和 SHA-256 校验文件，独立于产品 0.3.1 的离线 zip。
-- npm：账号所有者完成认证后，已发布 [dsh-ft-ftp@0.1.0](https://www.npmjs.com/package/dsh-ft-ftp/v/0.1.0)。官方 registry 的版本、SHA-512 完整性和 tarball SHA-256 均与验证包一致。
-- DSH Market：已提交 [收录申请 #52](https://github.com/tjsdyy/dshplugin/issues/52)，当前待审核，尚不能标记为市场已收录。当前市场仓库不存在 README 所提及的 plugin-submission 标签，已在申请中注明，由维护者分流。
+- Python 产品 0.3.1：已提供 Windows / macOS 安装包，见 [产品发布页](https://github.com/ftrans-cn/ft-ftp-mcp-stdio/releases/tag/tag_v0.3.1)。
+- npm 包 0.3.1：已正式发布至 [npm](https://www.npmjs.com/package/ft-ftp-mcp-stdio/v/0.3.1)，官方 registry 元数据及包完整性已核验。
+- 源码及文档同步目标：[GitLab](https://gitlab.ftrans.cn/ftrans/ft-ftp-mcp-stdio) 与 [GitHub](https://github.com/ftrans-cn/ft-ftp-mcp-stdio)。
+- 本机 Harness Desktop：已通过官方 pluginManager 按 npm 包名从官方 registry 安装 0.3.1；14 个工具注册、配置发现、连接测试和目录读取通过。
+- DSH Market：正式版本尚待收录审核，npm 发布与 Harness 安装成功不代表已上架市场。
 
-GitHub Release tarball SHA-256：`a801d5a208eace06850a7f133c48141dceca9f9777b1bb8c36ce594148146023`。
+## 发布完整性
 
-已使用 GitHub CLI 从 Release 下载回产物并核对 SHA-256，在全新隔离 DSH profile 安装该下载文件，14 个工具及 list_servers 验证通过。本机网络通过直接下载 URL 安装曾出现连接重置；这一路径尚未在本机验证通过。遇到同样网络问题时，可先运行 `gh release download dsh-v0.1.0 --repo ftrans-cn/ft-ftp-mcp-stdio --pattern dsh-ft-ftp-0.1.0.tgz`，再按安装说明添加本地文件。
+- tarball SHA-256：`edea7da72ccb485c6f7c20307d0d4121095e328094459523b37e30be5839c8ba`。
+- npm dist.integrity：`sha512-zAXa5hwnxcYw7dHQU6508htUUKlMVfz9pgQ7Kem6/FQhuzlPz57JyzpUdEo+2AAsRmCvBHbieJL9UZ0dOgrh2w==`。
+- Desktop 依赖及锁文件记录 registry 版本 0.3.1 及上述完整性；安装请求未使用本地 tarball。临时验证入口已移除，原 profile patch 已恢复，正式插件依赖保留。
 
-推荐 CLI 安装指令：`dsh plugin --profile web add dsh-ft-ftp@0.1.0`。桌面用户在插件管理页面输入 `dsh-ft-ftp@0.1.0` 安装；不要使用 CLI 修改 desktop profile。
+## 安装说明
 
-发布后曾遇到 registry CDN 对新 tarball 的短暂 404 缓存（300 秒）；带查询参数的独立下载可获取正确产物，缓存过期后，全新隔离 DSH profile 按标准 npm 包名安装成功，14 个工具注册及 list_servers 实际调用通过。
+参阅 [FT FTP MCP 安装说明](../integrations/dsh/README.md)及 [验证记录](DSH-Market-适配验证.md)。Codex / WorkBuddy 继续按产品手册完成手动安装；DSH 使用 npm 包，运行前需安装 Python 3.12 产品运行时。
 
-## 安装及验证
+## 正式发布步骤
 
-Windows / macOS 共用 [插件安装说明](../integrations/dsh/README.md)。原有 Windows / macOS 独立产品手册以及 Codex / WorkBuddy 手动安装继续有效。
+1. 完成 README 评审，将审核通过的源码和文档推送到 GitHub。
+2. 在仓库根目录执行 `npm pack ./integrations/dsh --pack-destination ./release`，核验包名、版本、README、入口及文件清单。
+3. 将该 tarball 发布到官方 registry，并完成 npm 要求的本机账号认证。
+4. 使用 `npm view ft-ftp-mcp-stdio@0.3.1 dist.integrity --registry https://registry.npmjs.org/` 核验完整性，再从 registry 安装到全新 DSH profile，验证工具注册和实际调用。
+5. 发布正式下载包，提交市场收录申请，并回填实际链接及审核状态。
 
-本地验证、实际桌面 Host 验证和 macOS / SFTP 验证边界见 [适配验证记录](DSH-Market-适配验证.md)。市场或 GitHub 的收录不能代替实际运行测试。
-
-## npm 发布与后续维护
-
-1. 维护者通过本机 npm 浏览器登录完成发布权限认证；不要把 Token 写入代码、文档或聊天。
-2. 使用通过验证的 tarball 执行 `npm publish <tarball绝对路径> --access public --registry https://registry.npmjs.org/`；如 npm 要求二次认证，在本机交互完成。
-3. 通过 `npm view dsh-ft-ftp@0.1.0 dist.integrity --registry https://registry.npmjs.org/` 核验版本和完整性，再在全新 DSH profile 从 registry 安装并验证工具。
-4. 市场条目优先使用 npm 安装指令；npm 尚不可用时可提交 GitHub Release tarball URL 安装指令，并明确该状态。不要使用项目根目录的 `github:ftrans-cn/ft-ftp-mcp-stdio`：根目录不是 DSH bundle。
-5. 后续升级适配包须更新版本、兼容范围、验证和发布记录。npm 已发布版本不可覆盖；必要时停用有问题版本并发布修正版。GitHub 代码可通过新提交回退，用户可从插件管理器禁用插件，原独立产品不受影响。
+已发布的 npm 版本不可覆盖。后续修正应使用新的版本号。禁用或卸载 DSH 插件会保留 Python 产品运行时、配置、系统凭据及 Codex / WorkBuddy 配置。
