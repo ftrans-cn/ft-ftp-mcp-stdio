@@ -96,11 +96,13 @@ node $dshEntry --profile ftp-validation --dump-config
 
 ### 本机桌面版安装补充（2026-11-17）
 
-已把相同 SHA-256 的本地 tarball 安装到本机正在运行的 DeepSeek Harness Desktop 0.2.2-rc.1 的 `desktop` profile，使用正式安装的产品 Python（产品版本 0.3.1），没有使用开发 `.venv`。桌面版 CLI 明确保留 desktop profile，因此实际通过桌面进程自带的 `pluginManager` 服务完成安装与启用，并验证 `application: applied`、无警告。
+首次验证使用本地构建 tarball（SHA-256：`393459abaed4b16ed07078c112c538de50a376e792c1bbbb61783f792512164d`），安装到本机正在运行的 DeepSeek Harness Desktop 0.2.2-rc.1 的 `desktop` profile，使用正式安装的产品 Python（产品版本 0.3.1），没有使用开发 `.venv`。桌面版 CLI 明确保留 desktop profile，因此实际通过桌面进程自带的 `pluginManager` 服务完成安装与启用，并验证 `application: applied`、无警告。
 
 在当前桌面 Host 内临时加载只读探测插件，经实际 ToolsService 和原生执行器验证：14 个工具注册成功；`list_servers` 识别到现有 3 个服务器；默认服务器 `test_connection` 和根目录 `list_dir` 成功。未执行远端写入，也未把服务器地址、账号、凭据或文件清单写入报告。MCP 子进程的父进程为当前 Desktop Host，证明验证落在实际桌面应用中。
 
 首次从热更新辅助插件内调用管理服务继承了 HMR 事务上下文，导致嵌套事务错误；临时辅助代码脱离该异步上下文后，通过管理服务成功启用。该代码仅用于本机安装，未加入产品 tarball。全部临时探测条目已移除，用户原始 `cordis.patch.yml` 与备份逐字节一致；`package.json` 保留正式插件依赖及 bundle 启用项。应用未重启。
+
+随后仅更新包内安装说明，重新打包得到本文前述最终 SHA-256；从 GitHub Release 下载回最终包并校验一致，全新隔离 profile 下 14 个工具注册和 list_servers 再次通过。最终包的真实 DSH / FTP 全工具验证也已通过。
 
 本机证据及安装前备份位于 `build/dsh-desktop-install-20261117`（忽略跟踪）。这是本地安装，不是 npm 发布或市场上架。
 
