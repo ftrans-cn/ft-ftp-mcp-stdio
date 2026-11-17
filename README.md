@@ -57,6 +57,8 @@ MCP 客户端配置只负责启动本地 Server；FTP/SFTP 主机、账号和边
 
 ## 快速开始
 
+DSH Market 适配位于独立目录，不改变下面的独立 MCP 安装方式，也不改变 Codex / WorkBuddy 的手动配置。DSH 用户参阅 [Windows / macOS 通用安装说明](integrations/dsh/README.md)，维护者参阅 [适配验证记录](docs/DSH-Market-适配验证.md)。
+
 ### 1. 安装发布包
 
 正式分发包为：

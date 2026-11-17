@@ -9,6 +9,8 @@ __pycache__/
 .uv-cache/
 
 # Build outputs
+node_modules/
+*.tgz
 dist/
 build/
 *.whl

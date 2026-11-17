@@ -1,0 +1,22 @@
+{
+  "name": "dsh-ft-ftp",
+  "version": "0.1.0",
+  "description": "FTP/SFTP tools for DeepSeek Harness using the independently installed FT FTP MCP server.",
+  "type": "module",
+  "license": "MIT",
+  "main": "index.mjs",
+  "files": ["index.mjs", "runtime.mjs", "cordis.patch.yml", "README.md", "LICENSE"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ftrans-cn/ft-ftp-mcp-stdio.git",
+    "directory": "integrations/dsh"
+  },
+  "keywords": ["dsh-plugin", "deepseek-harness", "mcp", "ftp", "sftp"],
+  "engines": {"node": ">=24.9.0", "dsh": "0.2.2-rc.1"},
+  "dsh": {"bundle": {"patch": "./cordis.patch.yml"}},
+  "peerDependencies": {
+    "@deepseek-ai/dsh-mcp-client": "0.2.2-rc.1"
+  },
+  "dependencies": { "@deepseek-ai/schemastery": "~3.19.0" },
+  "scripts": {"test": "node --test test/*.test.mjs"}
+}
