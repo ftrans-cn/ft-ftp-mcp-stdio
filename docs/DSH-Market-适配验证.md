@@ -115,3 +115,8 @@ node $dshEntry --profile ftp-validation --dump-config
 正式上架使用经过验证的同一 tarball 发布 npm，再验证公开 registry 安装，最后向市场提交条目。应分别记录 npm 版本/完整性、提交 Issue URL、审核结果和市场安装后的真实工具调用；不得把“已提交”标记为“已上架”。适配位于子目录，市场安装指令应使用 npm 包名，不能把当前项目根目录直接当作 DSH bundle 安装。
 
 规则来源：[DSH 官方 bundle 发布与 profile 安装说明](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md)、[官方 MCP 桥接器说明](https://github.com/deepseek-ai/deepseek-harness/tree/master/packages/mcp/mcp-client)、[DSH Market 提交入口](https://github.com/tjsdyy/dshplugin/issues/new?labels=plugin-submission)。运行行为以此次安装的 npm 0.2.2-rc.1 包和实际测试为准。
+
+
+### npm 正式包验证补充（2026-11-17）
+
+账号所有者完成发布认证后，官方 registry 的 `dsh-ft-ftp@0.1.0` 已可查询。`dist.integrity` 为 `sha512-7vzCWR+WvV7vzospwW8zs0g0Pk96/7fFfDu0KW48Kwog3fcH0GmFpOX2/8Hxaz+TMvH6K0X/64hAz65UiTHlrQ==`，下载后 SHA-256 与最终 Release 包一致。发布初期遇到短暂 CDN 404 缓存，缓存过期后在全新隔离 `ftp-npm-validation` profile 执行 `dsh plugin --profile ftp-npm-validation add dsh-ft-ftp@0.1.0 --registry https://registry.npmjs.org/` 成功，随后真实启动 profile，14 个工具注册和 list_servers 调用通过。该检查不修改用户日常 desktop profile。

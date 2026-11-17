@@ -6,12 +6,16 @@
 
 - 代码已推送：[提交 cfe8cec](https://github.com/ftrans-cn/ft-ftp-mcp-stdio/commit/cfe8cecb5a22ea2f1b1edb9492ef7a869c34622b)，适配源目录 `integrations/dsh`。
 - GitHub 插件包已发布：[dsh-v0.1.0 Release](https://github.com/ftrans-cn/ft-ftp-mcp-stdio/releases/tag/dsh-v0.1.0)，包含 tarball 和 SHA-256 校验文件，独立于产品 0.3.1 的离线 zip。
-- npm：已登录并尝试发布，registry 返回 E403，要求双因素认证或具备绕过 2FA 权限的细粒度 Token；当前版本尚未发布，不能使用 npm 包名安装。需账号所有者在本机完成认证后发布，再核验 registry。
+- npm：账号所有者完成认证后，已发布 [dsh-ft-ftp@0.1.0](https://www.npmjs.com/package/dsh-ft-ftp/v/0.1.0)。官方 registry 的版本、SHA-512 完整性和 tarball SHA-256 均与验证包一致。
 - DSH Market：已提交 [收录申请 #52](https://github.com/tjsdyy/dshplugin/issues/52)，当前待审核，尚不能标记为市场已收录。当前市场仓库不存在 README 所提及的 plugin-submission 标签，已在申请中注明，由维护者分流。
 
 GitHub Release tarball SHA-256：`a801d5a208eace06850a7f133c48141dceca9f9777b1bb8c36ce594148146023`。
 
 已使用 GitHub CLI 从 Release 下载回产物并核对 SHA-256，在全新隔离 DSH profile 安装该下载文件，14 个工具及 list_servers 验证通过。本机网络通过直接下载 URL 安装曾出现连接重置；这一路径尚未在本机验证通过。遇到同样网络问题时，可先运行 `gh release download dsh-v0.1.0 --repo ftrans-cn/ft-ftp-mcp-stdio --pattern dsh-ft-ftp-0.1.0.tgz`，再按安装说明添加本地文件。
+
+推荐 CLI 安装指令：`dsh plugin --profile web add dsh-ft-ftp@0.1.0`。桌面用户在插件管理页面输入 `dsh-ft-ftp@0.1.0` 安装；不要使用 CLI 修改 desktop profile。
+
+发布后曾遇到 registry CDN 对新 tarball 的短暂 404 缓存（300 秒）；带查询参数的独立下载可获取正确产物，缓存过期后，全新隔离 DSH profile 按标准 npm 包名安装成功，14 个工具注册及 list_servers 实际调用通过。
 
 ## 安装及验证
 
