@@ -115,7 +115,7 @@ try {
   await assert.rejects(async () => { await bad; }, /standalone product|absolute path/);
   assert.deepEqual(names(), [], 'failed startup does not leave stale tools');
   await bad.dispose();
-  console.log(JSON.stringify({ dsh: '0.2.2-rc.1', tools: expected.length, calls: count, lifecycle: 'passed', reconnect: 'passed', realFtp: 'passed' }));
+  console.log(JSON.stringify({ dsh: JSON.parse(readFileSync(join(runtime, 'node_modules/@deepseek-ai/dsh/package.json'), 'utf8')).version, tools: expected.length, calls: count, lifecycle: 'passed', reconnect: 'passed', realFtp: 'passed' }));
 } finally {
   if (oldPythonPath === undefined) delete process.env.PYTHONPATH;
   else process.env.PYTHONPATH = oldPythonPath;

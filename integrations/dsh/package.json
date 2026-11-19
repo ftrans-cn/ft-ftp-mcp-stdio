@@ -1,6 +1,6 @@
 {
   "name": "ft-ftp-mcp-stdio",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "FT FTP MCP: FTP/SFTP file tools for AI agents, with DeepSeek Harness installation support.",
   "type": "module",
   "license": "MIT",
@@ -12,10 +12,10 @@
     "directory": "integrations/dsh"
   },
   "keywords": ["dsh-plugin", "deepseek-harness", "mcp", "ftp", "sftp"],
-  "engines": {"node": ">=24.9.0", "dsh": "0.2.2-rc.1"},
+  "engines": {"node": ">=24.9.0", "dsh": ">=0.2.2-rc.1"},
   "dsh": {"bundle": {"patch": "./cordis.patch.yml"}},
   "peerDependencies": {
-    "@deepseek-ai/dsh-mcp-client": "0.2.2-rc.1"
+    "@deepseek-ai/dsh-mcp-client": ">=0.2.2-rc.1"
   },
   "dependencies": { "@deepseek-ai/schemastery": "~3.19.0" },
   "scripts": {"test": "node --test test/*.test.mjs"}

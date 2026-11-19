@@ -5,7 +5,8 @@ FT FTP MCP 为 AI Agent 提供 FTP / SFTP 文件访问能力。通过 14 个 MCP
 支持在 Codex、WorkBuddy 和 DeepSeek Harness 中使用。服务器配置、凭据与访问范围由本机统一管理，多个客户端可使用同一套产品安装和配置。
 
 - 产品与包名：`ft-ftp-mcp-stdio`
-- 版本：`0.3.1`
+- Python 产品运行时：`0.3.1`
+- npm 插件包：`0.3.2`（DSH 兼容性修复）
 - 协议：FTP、SFTP
 - 系统：Windows x64、macOS Apple Silicon / Intel
 - 开源许可：MIT
@@ -39,11 +40,11 @@ FT FTP MCP 为 AI Agent 提供 FTP / SFTP 文件访问能力。通过 14 个 MCP
 
 ## 在 DeepSeek Harness 中使用
 
-兼容 DSH `0.2.2-rc.1`；CLI 使用 Node.js 24.9 及以上。发布状态见 [发布记录](https://github.com/ftrans-cn/ft-ftp-mcp-stdio/blob/main/docs/DSH-Market-发布记录.md)。
+DSH 与官方 MCP 桥接器的版本声明为 `>=0.2.2-rc.1`，不设版本上限；目前实测 DSH `0.2.2-rc.1` 和 `0.2.2-rc.5`；CLI 使用 Node.js 24.9 及以上。发布状态见 [发布记录](https://github.com/ftrans-cn/ft-ftp-mcp-stdio/blob/main/docs/DSH-Market-发布记录.md)。
 
 ### 桌面版
 
-在插件管理页面的安装入口输入 `ft-ftp-mcp-stdio@0.3.1`，安装并启用。使用本地插件文件时，输入文件绝对路径，例如 `C:/Downloads/ft-ftp-mcp-stdio-0.3.1.tgz`。
+在插件管理页面的安装入口输入 `ft-ftp-mcp-stdio@0.3.2`，安装并启用。使用本地插件文件时，输入文件绝对路径，例如 `C:/Downloads/ft-ftp-mcp-stdio-0.3.2.tgz`。
 
 桌面版的 `desktop` profile 由应用管理，安装、启用、禁用和卸载均通过桌面应用操作。不要使用 `dsh plugin --profile desktop ...`。
 
@@ -52,7 +53,7 @@ FT FTP MCP 为 AI Agent 提供 FTP / SFTP 文件访问能力。通过 14 个 MCP
 退出目标 profile 后安装，以下以 `web` 为例：
 
 ```sh
-dsh plugin --profile web add ft-ftp-mcp-stdio@0.3.1
+dsh plugin --profile web add ft-ftp-mcp-stdio@0.3.2
 dsh --profile web --dump-config
 dsh --profile web
 ```
@@ -60,7 +61,7 @@ dsh --profile web
 从本地插件文件安装时，把第一条命令替换为：
 
 ```sh
-dsh plugin --profile web add ./ft-ftp-mcp-stdio-0.3.1.tgz
+dsh plugin --profile web add ./ft-ftp-mcp-stdio-0.3.2.tgz
 ```
 
 组合配置中应包含 `id: ft-ftp` 和 `name: ft-ftp-mcp-stdio`。工具名称以 `mcp__ft-ftp-mcp-stdio__` 开头。
@@ -94,6 +95,8 @@ dsh plugin --profile web add ./ft-ftp-mcp-stdio-0.3.1.tgz
 
 ## 开发与验证
 
-在源码仓库根目录执行 `npm pack ./integrations/dsh --pack-destination .`，生成 `ft-ftp-mcp-stdio-0.3.1.tgz`。
+在源码仓库根目录执行 `npm pack ./integrations/dsh --pack-destination .`，生成 `ft-ftp-mcp-stdio-0.3.2.tgz`。
 
 Windows 已完成真实 DSH Desktop 工具注册、配置发现、连接和目录读取验证，以及本地 FTP 全工具、权限限制、崩溃重连和清理验证。macOS 路径逻辑已有测试，macOS 实机及 Keychain、DSH 链路上的真实 SFTP 尚未验证。详细结果见 [验证记录](https://github.com/ftrans-cn/ft-ftp-mcp-stdio/blob/main/docs/DSH-Market-适配验证.md)。
+
+版本范围遵循 npm SemVer：允许 0.2.2 的后续 rc 及更高正式版，但其他版本号的预发布版（例如 0.2.3-rc.1）不会自动匹配，需要另行声明。未实测的版本不代表已验证兼容。

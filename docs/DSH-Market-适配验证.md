@@ -56,3 +56,19 @@ node scripts/verify_dsh.mjs build/dsh-validation .venv/Scripts/python.exe
 - 兼容范围限于 DSH 0.2.2-rc.1。
 
 源码：[FT FTP MCP](https://github.com/ftrans-cn/ft-ftp-mcp-stdio)。正式发布状态见 [发布记录](DSH-Market-发布记录.md)。
+
+## npm 插件 0.3.2 的 rc.5 兼容性修复（2026-11-19）
+
+0.3.1 的 engines.dsh 和 MCP 桥接器 peerDependency 均精确锁定 rc.1，会导致 rc.5 被市场判为不兼容或产生依赖冲突。0.3.2 将两者统一改为 `>=0.2.2-rc.1`，按用户要求不设上限。实测范围仍仅为 rc.1 和 rc.5；其他版本未实测。npm 默认 SemVer 匹配不会自动接受其他版本号的预发布版，例如 0.2.3-rc.1。
+
+Python 产品仍为 0.3.1；FTP/SFTP 核心、stdio 入口和 Codex / WorkBuddy 安装配置没有变化。修复只影响 npm 包的兼容元数据及安装说明；验证脚本改为报告实际加载的 DSH 版本，避免硬编码 rc.1。
+
+| 隔离验证 | 结果 |
+| --- | --- |
+| Node 24 配置测试 | 2 项通过 |
+| DSH 0.2.2-rc.1 + npm tarball 0.3.2 | 14 个工具、40 次调用，真实 FTP、崩溃重连及生命周期清理通过 |
+| DSH 0.2.2-rc.5 + npm tarball 0.3.2 | 14 个工具、41 次调用，真实 FTP、崩溃重连及生命周期清理通过 |
+
+rc.5 测试使用独立测试环境和 localhost FTP fixture，没有改动实际 Desktop profile。macOS、DSH-to-SFTP 实机验证仍不在本轮范围。0.3.2 已获得 npm 发布成功回执；registry 下载核验见发布记录。市场需同步新版本及兼容信息。
+
+补充环境边界：rc.5 的 MCP 桥接器及测试依赖已下载并实际加载验证；全量 CLI 安装的其他依赖下载未全部完成，本轮未验证完整 CLI 安装完成或 Desktop 图形入口安装。
