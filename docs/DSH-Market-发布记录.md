@@ -32,4 +32,12 @@
 
 ## npm 插件 0.3.2（2026-11-19）
 
-修复 DSH rc.5 被精确版本限制拦截的问题，版本声明为 `>=0.2.2-rc.1`，不设上限，保留 rc.1 支持；隔离环境的真实工具调用及生命周期验证已通过。Python 产品运行时保持 0.3.1。安装说明已更新为 0.3.2；npm 已确认发布成功，registry 同步及下载校验结果见下方回执。不能通过覆盖 0.3.1 更新其 npm 元数据。精选目录 [收录 PR #16212](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin/pull/16212) 已合并，条目不固定版本，无需重复提交收录；市场缓存需同步最新版本和兼容信息。详见验证记录末节。
+修复 DSH rc.5 被精确版本限制拦截的问题，版本声明为 `>=0.2.2-rc.1`，不设上限，保留 rc.1 支持；隔离环境的真实工具调用及生命周期验证已通过。Python 产品运行时保持 0.3.1。安装说明已更新为 0.3.2；npm 已正式发布，registry 同步及下载校验均已完成，结果见下方回执。不能通过覆盖 0.3.1 更新其 npm 元数据。精选目录 [收录 PR #16212](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin/pull/16212) 已合并，条目不固定版本，无需重复提交收录；市场缓存需同步最新版本和兼容信息。详见验证记录末节。
+
+### 0.3.2 发布回执
+
+- 正式包：[ft-ftp-mcp-stdio@0.3.2](https://www.npmjs.com/package/ft-ftp-mcp-stdio/v/0.3.2)，npm latest 为 0.3.2。
+- registry 的 engines.dsh 与 MCP 桥接器 peerDependency 均为 `>=0.2.2-rc.1`。
+- 从官方 registry 按包名下载的 tarball 与发布文件完全一致，SHA-256：`2ca92da55ee74ec0e8d88bd190402cdda11b83d289db12e93639fd72039e147a`。
+- 下载包在隔离 rc.5 环境复验：14 个工具、38 次调用，真实 FTP、生命周期清理和崩溃重连通过。调用次数会随连接恢复轮询变化。
+- 精选目录的公开 plugins.json 已包含本插件并映射到正确 npm 包，安装命令未固定版本；本次核查时目录版本缓存仍为 0.3.1，等待自动刷新，无需重复收录 PR。详情页：https://awesome-dsh-plugin.com/p/ftrans-cn/ft-ftp-mcp-stdio--integrations-dsh/ 。本轮未在实际 Desktop 图形入口重新安装。

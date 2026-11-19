@@ -69,6 +69,6 @@ Python 产品仍为 0.3.1；FTP/SFTP 核心、stdio 入口和 Codex / WorkBuddy 
 | DSH 0.2.2-rc.1 + npm tarball 0.3.2 | 14 个工具、40 次调用，真实 FTP、崩溃重连及生命周期清理通过 |
 | DSH 0.2.2-rc.5 + npm tarball 0.3.2 | 14 个工具、41 次调用，真实 FTP、崩溃重连及生命周期清理通过 |
 
-rc.5 测试使用独立测试环境和 localhost FTP fixture，没有改动实际 Desktop profile。macOS、DSH-to-SFTP 实机验证仍不在本轮范围。0.3.2 已获得 npm 发布成功回执；registry 下载核验见发布记录。市场需同步新版本及兼容信息。
+rc.5 测试使用独立测试环境和 localhost FTP fixture，没有改动实际 Desktop profile。macOS、DSH-to-SFTP 实机验证仍不在本轮范围。0.3.2 已正式发布；从 registry 下载的最终包在 rc.5 复验通过：14 个工具、38 次调用、真实 FTP、重连和清理均通过。完整性核验见发布记录。市场需同步新版本及兼容信息。
 
 补充环境边界：rc.5 的 MCP 桥接器及测试依赖已下载并实际加载验证；全量 CLI 安装的其他依赖下载未全部完成，本轮未验证完整 CLI 安装完成或 Desktop 图形入口安装。
